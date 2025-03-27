@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1743007703 source:g:\ltnc_ngay1\main.cpp
+	<SDL.h>
+	<SDL_image.h>
+	<iostream>
+	<vector>
+	<ctime>
+
+1743076654 source:g:\ltnc\main.cpp
+	<SDL_image.h>
+	<iostream>
+	<vector>
+	<ctime>
+

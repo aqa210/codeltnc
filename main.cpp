@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 #include <vector>
@@ -8,8 +7,8 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const int GRAVITY = 1;
 const int FLAP_STRENGTH = -15;
-const int PIPE_WIDTH = 80;
-const int PIPE_GAP = 200;
+const int PIPE_WIDTH = 70;
+const int PIPE_GAP = 180;
 const int PIPE_SPEED = 3;
 
 SDL_Window* window = nullptr;
@@ -17,24 +16,25 @@ SDL_Renderer* renderer = nullptr;
 SDL_Texture* birdTexture = nullptr;
 SDL_Texture* pipeTexture = nullptr;
 SDL_Texture* backgroundTexture = nullptr;
+SDL_Texture* gameOverTexture = nullptr;
+SDL_Texture* startTexture = nullptr; // Ảnh Start
 
 struct Bird {
     int x, y, velocity;
     SDL_Rect rect;
-    SDL_Rect spriteClips[3]; // 3 frame animation
-    int frame = 0; // Frame hiện tại
-    Uint32 lastFrameTime = 0; // Lưu thời gian đổi frame
+    SDL_Rect spriteClips[3];
+    int frame = 0;
+    Uint32 lastFrameTime = 0;
 
     Bird() {
         x = 100;
         y = SCREEN_HEIGHT / 2;
         velocity = 0;
-        rect = {x, y, 50, 50};
+        rect = {x, y, 70, 70};
 
-        // Xác định từng frame từ spritesheet
-        spriteClips[0] = { 0, 0, 529/3, 143 };   // Frame 1 (cánh xuống)
-        spriteClips[1] = { 529/3, 0, 529/3, 143 };  // Frame 2 (cánh ngang)
-        spriteClips[2] = { 529*2/3,0, 529/3 , 143};  // Frame 3 (cánh lên)
+        spriteClips[0] = { 0, 0, 520/3, 165 };
+        spriteClips[1] = { 520/3, 0, 520/3, 165 };
+        spriteClips[2] = { 520*2/3, 0, 520/3, 165 };
     }
 
     void flap() { velocity = FLAP_STRENGTH; }
@@ -44,7 +44,6 @@ struct Bird {
         y += velocity;
         rect.y = y;
 
-        // Cập nhật frame animation sau mỗi 100ms
         if (SDL_GetTicks() - lastFrameTime > 100) {
             frame = (frame + 1) % 3;
             lastFrameTime = SDL_GetTicks();
@@ -60,22 +59,41 @@ struct Pipe {
     int x, height;
     SDL_Rect topRect, bottomRect;
     bool passed;
+    int yOffset = 0;       // Độ lệch dọc để di chuyển lên xuống
+    int yVelocity = 1;     // Tốc độ di chuyển lên/xuống
+    bool isMoving;         // Xác định cột này có di chuyển không
+
+    static int pipeCount;  // Đếm số cột đã xuất hiện
 
     Pipe(int startX) {
         x = startX;
         height = rand() % (SCREEN_HEIGHT - PIPE_GAP - 100) + 50;
-
-        int offset = 10; // Điều chỉnh vị trí ống lên trên
-        topRect = {x, 0, PIPE_WIDTH, height};
-        bottomRect = {x, height + PIPE_GAP - offset, PIPE_WIDTH, SCREEN_HEIGHT - (height + PIPE_GAP) + offset};
-
         passed = false;
+
+        // Sau một số cột đầu tiên (ví dụ 3 cột), các cột mới sẽ bắt đầu di chuyển
+        isMoving = (pipeCount >= 3);
+        pipeCount++;
+
+        updateRects();
+    }
+
+    void updateRects() {
+        topRect = {x, yOffset -50 , PIPE_WIDTH, height};
+        bottomRect = {x, height + PIPE_GAP + yOffset +50 , PIPE_WIDTH, SCREEN_HEIGHT - (height + PIPE_GAP)};
     }
 
     void update() {
-        x -= PIPE_SPEED;
-        topRect.x = x;
-        bottomRect.x = x;
+        x -= PIPE_SPEED;  // Di chuyển sang trái
+
+        // Chỉ di chuyển lên xuống nếu isMoving == true
+        if (isMoving) {
+            yOffset += yVelocity;
+            if (yOffset > 50 || yOffset < -50) {
+                yVelocity = -yVelocity;
+            }
+        }
+
+        updateRects();
     }
 
     bool checkCollision(SDL_Rect bird) {
@@ -87,6 +105,9 @@ struct Pipe {
         SDL_RenderCopyEx(renderer, texture, NULL, &topRect, 180, NULL, SDL_FLIP_NONE);
     }
 };
+
+// Khởi tạo biến đếm số cột
+int Pipe::pipeCount = 0;
 void initSDL() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL Initialization Failed: " << SDL_GetError() << std::endl;
@@ -109,11 +130,13 @@ void initSDL() {
 }
 
 void loadAssets() {
-    birdTexture = IMG_LoadTexture(renderer, "bird_spritesheet.png"); // Sử dụng spritesheet
+    birdTexture = IMG_LoadTexture(renderer, "bird_spritesheet.png");
     pipeTexture = IMG_LoadTexture(renderer, "pipe.png");
-    backgroundTexture = IMG_LoadTexture(renderer, "background.jpg");
+    backgroundTexture = IMG_LoadTexture(renderer, "background.png");
+    gameOverTexture = IMG_LoadTexture(renderer, "gameover.png");
+    startTexture = IMG_LoadTexture(renderer, "start.png");
 
-    if (!birdTexture || !pipeTexture || !backgroundTexture) {
+    if (!birdTexture || !pipeTexture || !backgroundTexture || !gameOverTexture || !startTexture) {
         std::cerr << "Failed to load images!" << std::endl;
         exit(1);
     }
@@ -123,6 +146,8 @@ void cleanUp() {
     SDL_DestroyTexture(birdTexture);
     SDL_DestroyTexture(pipeTexture);
     SDL_DestroyTexture(backgroundTexture);
+    SDL_DestroyTexture(gameOverTexture);
+    SDL_DestroyTexture(startTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     IMG_Quit();
@@ -141,6 +166,10 @@ void showStartScreen() {
 
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+
+        SDL_Rect startRect = {SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 100, 300, 200};
+        SDL_RenderCopy(renderer, startTexture, NULL, &startRect);
+
         SDL_RenderPresent(renderer);
     }
 }
@@ -157,9 +186,10 @@ void showGameOverScreen(int score) {
 
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_Rect textRect = {SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 50, 300, 100};
-        SDL_RenderFillRect(renderer, &textRect);
+
+        SDL_Rect gameOverRect = {SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 100, 300, 200};
+        SDL_RenderCopy(renderer, gameOverTexture, NULL, &gameOverRect);
+
         SDL_RenderPresent(renderer);
     }
 }
@@ -171,7 +201,7 @@ int main(int argc, char* argv[]) {
 
     while (true) {
         showStartScreen();
-
+        Pipe::pipeCount = 0;
         bool running = true;
         SDL_Event event;
         Bird bird;
@@ -209,13 +239,8 @@ int main(int argc, char* argv[]) {
 
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-
             bird.render(renderer, birdTexture);
-
-            for (auto& pipe : pipes) {
-                pipe.render(renderer, pipeTexture);
-            }
-
+            for (auto& pipe : pipes) pipe.render(renderer, pipeTexture);
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
         }

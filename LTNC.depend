@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1743007703 source:g:\ltnc_ngay1\main.cpp
+1743013489 source:g:\ltnc\main.cpp
 	<SDL.h>
 	<SDL_image.h>
 	<iostream>
