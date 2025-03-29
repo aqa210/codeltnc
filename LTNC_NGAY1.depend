@@ -6,8 +6,10 @@
 	<vector>
 	<ctime>
 
-1743076654 source:g:\ltnc\main.cpp
+1743223273 source:g:\ltnc\main.cpp
 	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
 	<iostream>
 	<vector>
 	<ctime>
