@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
         pipeSpeed = PIPE_SPEED;
         pipeSpawnInterval = PIPE_SPAWN_INTERVAL;
         bool paused = false;
-
+        loadHighScore();
         while (running) {
             bgX -= BG_SPEED;
             if (bgX <= -SCREEN_WIDTH) {
@@ -116,6 +116,7 @@ int main(int argc, char* argv[]) {
                         Mix_PlayChannel(-1, hitSound, 0);
                     }
                     showGameOverScreen(score);
+                    saveHighScore(score);
                 }
             }
 

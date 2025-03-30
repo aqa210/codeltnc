@@ -145,7 +145,8 @@ extern Mix_Chunk* scoreSound;
 extern Mix_Chunk* fallSound;
 extern Mix_Chunk* itemSound;
 extern int bgX;
-
+void loadHighScore();
+void saveHighScore(int currentScore);
 void initSDL();
 void loadAssets();
 void cleanUp();

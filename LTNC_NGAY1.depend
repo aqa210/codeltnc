@@ -6,7 +6,7 @@
 	<vector>
 	<ctime>
 
-1743323189 source:g:\ltnc\main.cpp
+1743341588 source:g:\ltnc\main.cpp
 	"Game.h"
 	"Screen.h"
 	"Render.h"
@@ -17,11 +17,12 @@
 	"Pipe.h"
 	<ctime>
 
-1743337574 source:g:\ltnc\game.cpp
+1743341650 source:g:\ltnc\game.cpp
 	"Game.h"
 	<iostream>
+	<fstream>
 
-1743336525 g:\ltnc\game.h
+1743341446 g:\ltnc\game.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -79,12 +80,12 @@
 1743323189 g:\ltnc\render.h
 	"Game.h"
 
-1743339982 source:g:\ltnc\screen.cpp
+1743340127 source:g:\ltnc\screen.cpp
 	"Screen.h"
 	"Render.h"
 	<iostream>
 
-1743324252 source:g:\ltnc\render.cpp
+1743341276 source:g:\ltnc\render.cpp
 	"Render.h"
 	<string>
 

@@ -1,13 +1,13 @@
 #include "Render.h"
 #include<string>
 void renderHighScore() {
-    if (!font) font = TTF_OpenFont(FONT_FILE, FONT_SIZE);
+    if (!font) font = TTF_OpenFont("font.ttf", 24); // Thay "font.ttf" bằng đường dẫn font của bạn
 
     std::string highScoreText = "High Score: " + std::to_string(highScore);
     SDL_Surface* surface = TTF_RenderText_Solid(font, highScoreText.c_str(), textColor);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-    SDL_Rect textRect = {SCREEN_WIDTH / 2 - surface->w / 2, HIGH_SCORE_TEXT_Y, surface->w, surface->h};
+    SDL_Rect textRect = {SCREEN_WIDTH / 2 - surface->w / 2, 50, surface->w, surface->h}; // Vị trí hiển thị
     SDL_RenderCopy(renderer, texture, NULL, &textRect);
 
     SDL_FreeSurface(surface);

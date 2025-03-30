@@ -1,6 +1,6 @@
 #include "Game.h"
 #include <iostream>
-
+#include<fstream>
 int highScore = 0;
 bool musicOn = true;
 float pipeSpeed = PIPE_SPEED;
@@ -29,6 +29,31 @@ Mix_Chunk* fallSound = nullptr;
 Mix_Chunk* itemSound = nullptr;
 int bgX = 0;
 
+void loadHighScore() {
+    std::ifstream file("highscore.txt");
+    if (file.is_open()) {
+        file >> highScore;
+        file.close();
+        std::cout << "Đã đọc highScore: " << highScore << std::endl;
+    } else {
+        highScore = 0;
+        std::cout << "Không tìm thấy tệp, đặt highScore = 0" << std::endl;
+    }
+}
+
+void saveHighScore(int currentScore) {
+    if (currentScore > highScore) {
+        highScore = currentScore;
+        std::ofstream file("highscore.txt");
+        if (file.is_open()) {
+            file << highScore;
+            file.close();
+            std::cout << "Đã lưu highScore: " << highScore << std::endl;
+        } else {
+            std::cerr << "Không thể mở tệp để lưu" << std::endl;
+        }
+    }
+}
 void initSDL() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         std::cerr << "SDL Initialization Failed: " << SDL_GetError() << std::endl;
