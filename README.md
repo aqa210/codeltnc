@@ -68,6 +68,8 @@ Game **Flappy Bird Clone** là một trò chơi arcade đơn giản, nơi ngư�
 - ✅ Vật phẩm đặc biệt (**+ điểm, thu nhỏ**).
 - ✅ Nhạc nền, hiệu ứng âm thanh.
 - ✅ Cơ chế tăng độ khó theo thời gian.
+- ✅ có lưu lại điểm sau mỗi lần chơi.
+- 
 
 ---
 💡 *README này sử dụng Markdown để hiển thị đẹp trên GitHub.*
