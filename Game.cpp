@@ -6,6 +6,8 @@ bool musicOn = true;
 float pipeSpeed = PIPE_SPEED;
 int pipeSpawnInterval = PIPE_SPAWN_INTERVAL;
 SDL_Color textColor = {255, 255, 255};
+
+
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 SDL_Texture* birdTexture = nullptr;

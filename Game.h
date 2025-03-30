@@ -61,7 +61,7 @@ const int SMOKE_SIZE_MIN = 30;
 const float SMOKE_FADE_RATE = 0.02f;
 const int SMOKE_SPAWN_CHANCE = 2;
 
-const int SPARKLE_SIZE = 10;
+const int SPARKLE_SIZE = 50;
 const float SPARKLE_LIFETIME = 1.0f;
 const int SPARKLE_VELOCITY_RANGE = 5;
 const float SPARKLE_FADE_RATE = 0.05f;

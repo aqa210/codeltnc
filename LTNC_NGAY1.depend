@@ -17,11 +17,11 @@
 	"Pipe.h"
 	<ctime>
 
-1743322846 source:g:\ltnc\game.cpp
+1743337574 source:g:\ltnc\game.cpp
 	"Game.h"
 	<iostream>
 
-1743324352 g:\ltnc\game.h
+1743336525 g:\ltnc\game.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -79,7 +79,7 @@
 1743323189 g:\ltnc\render.h
 	"Game.h"
 
-1743323092 source:g:\ltnc\screen.cpp
+1743339982 source:g:\ltnc\screen.cpp
 	"Screen.h"
 	"Render.h"
 	<iostream>

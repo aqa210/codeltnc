@@ -3,7 +3,8 @@
 #include <iostream>
 
 SDL_Rect musicButton = {SCREEN_WIDTH - MUSIC_BUTTON_X_OFFSET, MUSIC_BUTTON_Y, MUSIC_BUTTON_WIDTH, MUSIC_BUTTON_HEIGHT};
-
+SDL_Color restartColor = {255, 255, 0, 255}; // Màu vàng cho "Press SPACE again to restart"
+SDL_Color exitColor = {0, 255, 255, 255};      // Màu đỏ cho "Press ESC to Exit"
 void toggleMusic() {
     musicOn = !musicOn;
     if (musicOn) {
@@ -72,11 +73,16 @@ void showGameOverScreen(int score) {
     while (waiting) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) exit(0);
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
-                if (!firstPress) {
-                    firstPress = true;
-                } else {
-                    waiting = false;
+            if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_SPACE) {
+                    if (!firstPress) {
+                        firstPress = true;
+                    } else {
+                        waiting = false; // Restart game
+                    }
+                }
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    exit(0); // Exit game
                 }
             }
         }
@@ -93,13 +99,29 @@ void showGameOverScreen(int score) {
 
         renderScore(score);
         renderHighScore();
+
         if (firstPress) {
-            SDL_Surface* surface = TTF_RenderText_Solid(font, "Press SPACE again to restart", textColor);
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            SDL_Rect textRect = {SCREEN_WIDTH / 2 - surface->w / 2, SCREEN_HEIGHT - 100, surface->w, surface->h};
-            SDL_RenderCopy(renderer, texture, NULL, &textRect);
-            SDL_FreeSurface(surface);
-            SDL_DestroyTexture(texture);
+            // Logic nhấp nháy dựa trên thời gian
+            Uint32 time = SDL_GetTicks();
+            bool showText = (time / TEXT_BLINK_INTERVAL) % 2 == 0;
+
+            if (showText) {
+                // Hiển thị "Press SPACE again to restart" với màu vàng
+                SDL_Surface* restartSurface = TTF_RenderText_Solid(font, "Press SPACE again to restart", restartColor);
+                SDL_Texture* restartTexture = SDL_CreateTextureFromSurface(renderer, restartSurface);
+                SDL_Rect restartTextRect = {SCREEN_WIDTH / 2 - restartSurface->w / 2, SCREEN_HEIGHT - 100, restartSurface->w, restartSurface->h};
+                SDL_RenderCopy(renderer, restartTexture, NULL, &restartTextRect);
+                SDL_FreeSurface(restartSurface);
+                SDL_DestroyTexture(restartTexture);
+
+                // Hiển thị "Press ESC to Exit" với màu đỏ
+                SDL_Surface* exitSurface = TTF_RenderText_Solid(font, "Press ESC to Exit", exitColor);
+                SDL_Texture* exitTexture = SDL_CreateTextureFromSurface(renderer, exitSurface);
+                SDL_Rect exitTextRect = {SCREEN_WIDTH / 2 - exitSurface->w / 2, SCREEN_HEIGHT - 60, exitSurface->w, exitSurface->h};
+                SDL_RenderCopy(renderer, exitTexture, NULL, &exitTextRect);
+                SDL_FreeSurface(exitSurface);
+                SDL_DestroyTexture(exitTexture);
+            }
         }
 
         SDL_RenderPresent(renderer);
