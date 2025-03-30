@@ -6,11 +6,85 @@
 	<vector>
 	<ctime>
 
-1743223273 source:g:\ltnc\main.cpp
-	<SDL_image.h>
-	<SDL_mixer.h>
-	<SDL_ttf.h>
-	<iostream>
-	<vector>
+1743323189 source:g:\ltnc\main.cpp
+	"Game.h"
+	"Screen.h"
+	"Render.h"
+	"SmokeParticle.h"
+	"SparkleParticle.h"
+	"Item.h"
+	"Bird.h"
+	"Pipe.h"
 	<ctime>
+
+1743322846 source:g:\ltnc\game.cpp
+	"Game.h"
+	<iostream>
+
+1743324352 g:\ltnc\game.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1743322846 source:g:\ltnc\smokeparticle.cpp
+	"SmokeParticle.h"
+	<ctime>
+
+1743322846 g:\ltnc\smokeparticle.h
+	<SDL.h>
+	"Game.h"
+
+1743322846 source:g:\ltnc\sparkleparticle.cpp
+	"SparkleParticle.h"
+	<ctime>
+
+1743322846 g:\ltnc\sparkleparticle.h
+	<SDL.h>
+	"Game.h"
+
+1743323092 source:g:\ltnc\bird.cpp
+	"Bird.h"
+	<SDL_mixer.h>
+	<ctime>
+
+1743323092 g:\ltnc\bird.h
+	<SDL.h>
+	<vector>
+	"Game.h"
+	"SmokeParticle.h"
+	"SparkleParticle.h"
+
+1743322846 source:g:\ltnc\item.cpp
+	"Item.h"
+	<ctime>
+
+1743322846 g:\ltnc\item.h
+	<SDL.h>
+	<vector>
+	"Game.h"
+	"Pipe.h"
+
+1743323092 g:\ltnc\pipe.h
+	<SDL.h>
+	"Game.h"
+
+1743323092 source:g:\ltnc\pipe.cpp
+	"Pipe.h"
+	<ctime>
+
+1743323092 g:\ltnc\screen.h
+	"Game.h"
+
+1743323189 g:\ltnc\render.h
+	"Game.h"
+
+1743323092 source:g:\ltnc\screen.cpp
+	"Screen.h"
+	"Render.h"
+	<iostream>
+
+1743324252 source:g:\ltnc\render.cpp
+	"Render.h"
+	<string>
 

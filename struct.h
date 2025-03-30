@@ -1,0 +1,6 @@
+#ifndef STRUCT_H_INCLUDED
+#define STRUCT_H_INCLUDED
+
+
+
+#endif // STRUCT_H_INCLUDED
